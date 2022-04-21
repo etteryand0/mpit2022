@@ -44,11 +44,34 @@ const User = {
 
       const token = await jwt.sign({
         id: user.id,
-      }, process.env.JWT_SECRET, {
-        expiresIn: 3600 * 42
-      });
+      }, process.env.JWT_SECRET);
 
       return { token, user };
+    },
+    logInUser: async (_parent, { data, select }, { prisma }) => {
+      select = select.user
+      const { email, password } = data
+      select.select.password = true
+      const isValidEmail = emailRegex.test(data.email);
+
+      if (!isValidEmail)
+        throw new Error('Invalid email');
+      
+      const user = await prisma.user.findUnique({ where: { email }, ...select })
+
+      if (!user)
+        throw new Error('Entepreneur doesn\'t exist')
+      
+      const areEqual = bcrypt.compare(password, user.password)
+
+      if (!areEqual)
+        throw new Error('Wrong credentials')
+
+      const token = await jwt.sign({
+        id: user.id,
+      }, process.env.JWT_SECRET);
+
+      return { user, token }
     },
     updateOneUser: (_parent, args, { prisma }) => {
       return prisma.user.update(args)

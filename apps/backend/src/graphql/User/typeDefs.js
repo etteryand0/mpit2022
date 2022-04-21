@@ -67,6 +67,7 @@ const User = gql`
 
   type Mutation {
     createOneUser(data: UserCreateInput!): UserCreateOutput!
+    logInUser(data: LogInInput!): UserCreateOutput!
     updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
     deleteOneUser(where: UserWhereUniqueInput!): User
     upsertOneUser(
