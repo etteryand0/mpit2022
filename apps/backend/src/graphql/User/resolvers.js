@@ -22,7 +22,7 @@ const User = {
     },
   },
   Mutation: {
-    createOneUser: async (_parent, args, { prisma, salt, sendCode }) => {
+    createOneUser: async (_parent, args, { prisma, salt }) => {
       let { data } = args
       data.email = data.email.toLowerCase();
       const isValidEmail = emailRegex.test(data.email);
@@ -40,7 +40,6 @@ const User = {
       data.password = hashPassword;
 
       const select = args.select.user
-      console.log(args, data)
       const user = await prisma.user.create({ data, ...select });
 
       const token = await jwt.sign({
