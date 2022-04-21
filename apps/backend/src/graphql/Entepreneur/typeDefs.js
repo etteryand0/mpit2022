@@ -60,6 +60,7 @@ const Entepreneur = gql`
 
   type Mutation {
     createOneEntepreneur(data: EntepreneurCreateInput!): Entepreneur!
+    logInEntepreneur(data: EntepreneurLogInInput): EntepreneurLogInOutput!
     updateOneEntepreneur(
       data: EntepreneurUpdateInput!
       where: EntepreneurWhereUniqueInput!
@@ -75,6 +76,15 @@ const Entepreneur = gql`
       data: EntepreneurUpdateManyMutationInput!
       where: EntepreneurWhereInput
     ): BatchPayload
+  }
+
+  input EntepreneurLogInInput {
+    email: String!
+    password: String!
+  }
+  type EntepreneurLogInOutput {
+    token: String!
+    entepreneur: Entepreneur!
   }
 `
 
