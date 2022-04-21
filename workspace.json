@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "agronet": "apps/agronet",
+    "agronet-e2e": "apps/agronet-e2e"
+  }
+}
