@@ -17,8 +17,18 @@ const Donation = {
     },
   },
   Mutation: {
-    createOneDonation: (_parent, args, { prisma }) => {
-      return prisma.donation.create(args)
+    createOneDonation: async (_parent, args, { prisma }) => {
+      args.select.amount = true
+      if (!args.select.crowdfunding) args.select.crowdfunding = { select: {}}
+      args.select.crowdfunding.select.earned = true
+      args.select.crowdfunding.select.id = true
+      const donation = await prisma.donation.create(args)
+
+      const { crowdfunding: { id, earned }, amount } = donation
+
+      await prisma.crowdfunding.update({ where: { id }, data: { earned: earned + amount } })
+
+      return donation
     },
     updateOneDonation: (_parent, args, { prisma }) => {
       return prisma.donation.update(args)
