@@ -1,3 +1,8 @@
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const User = {
   Query: {
     findUniqueUser: (_parent, args, { prisma }) => {
@@ -17,8 +22,34 @@ const User = {
     },
   },
   Mutation: {
-    createOneUser: (_parent, args, { prisma }) => {
-      return prisma.user.create(args)
+    createOneUser: async (_parent, args, { prisma, salt, sendCode }) => {
+      let { data } = args
+      data.email = data.email.toLowerCase();
+      const isValidEmail = emailRegex.test(data.email);
+
+      if (!isValidEmail)
+        throw new Error('Invalid email');
+      if (data.password.length < 8)
+        throw new Error('Too short password');
+
+      if (await prisma.user.findUnique({ where: { email: data.email }})) {
+        throw new Error("User already exists")
+      } 
+
+      const hashPassword = await bcrypt.hash(data.password, salt);
+      data.password = hashPassword;
+
+      const select = args.select.user
+      console.log(args, data)
+      const user = await prisma.user.create({ data, ...select });
+
+      const token = await jwt.sign({
+        id: user.id,
+      }, process.env.JWT_SECRET, {
+        expiresIn: 3600 * 42
+      });
+
+      return { token, user };
     },
     updateOneUser: (_parent, args, { prisma }) => {
       return prisma.user.update(args)

@@ -66,7 +66,7 @@ const User = gql`
   }
 
   type Mutation {
-    createOneUser(data: UserCreateInput!): User!
+    createOneUser(data: UserCreateInput!): UserCreateOutput!
     updateOneUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
     deleteOneUser(where: UserWhereUniqueInput!): User
     upsertOneUser(
@@ -79,6 +79,11 @@ const User = gql`
       data: UserUpdateManyMutationInput!
       where: UserWhereInput
     ): BatchPayload
+  }
+
+  type UserCreateOutput {
+    token: String!
+    user: User!
   }
 `
 
