@@ -1,5 +1,5 @@
 {
-  "npmScope": "your-workspace-name",
+  "npmScope": "agronet",
   "affected": {
     "defaultBase": "master"
   },
