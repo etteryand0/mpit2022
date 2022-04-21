@@ -90,7 +90,7 @@ model Crowdfunding {
   ownerId   String      @unique
   owner     Entepreneur @relation(fields: [ownerId], references: [id])
   goal      Int
-  earned    Int
+  earned    Int         @default(0)
   donations Donation[]
 
   createdAt DateTime @default(now())
