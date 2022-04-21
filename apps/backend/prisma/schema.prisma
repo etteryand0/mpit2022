@@ -1,0 +1,66 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum RoleEnum {
+  User
+  Admin
+}
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+
+  name            String
+  surname         String
+  role            RoleEnum       @default(User)
+  purchases       Product[]
+  donatedFundings Crowdfunding[]
+
+  createdAt DateTime @default(now())
+}
+
+model Entepreneur {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+
+  name         String
+  bio          String
+  avatar       String
+  products     Product[]
+  crowdfunding Crowdfunding?
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id         String      @id @default(cuid())
+  owner_id   String
+  owner      Entepreneur @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  purchasers User[]
+
+  title       String
+  description String
+  composition String
+  image       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Crowdfunding {
+  id       String      @id @default(cuid())
+  ownerId  String      @unique
+  owner    Entepreneur @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  donators User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
