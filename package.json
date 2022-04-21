@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "graphql-middleware": "^6.1.25",
     "graphql-upload": "^13.0.0",
     "react": "17.0.2",
     "react-native": "0.67.4",
