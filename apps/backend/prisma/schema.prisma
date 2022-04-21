@@ -24,6 +24,8 @@ model User {
   donations Donation[]
 
   createdAt DateTime @default(now())
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    String
 }
 
 model Entepreneur {
@@ -38,15 +40,18 @@ model Entepreneur {
   crowdfunding Crowdfunding?
 
   createdAt DateTime @default(now())
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    String
 }
 
 model Product {
   id         String      @id @default(cuid())
   owner_id   String
-  owner      Entepreneur @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  owner      Entepreneur @relation(fields: [owner_id], references: [id])
   purchasers User[]
 
   title       String
+  category    Category[]
   description String
   composition String
   image       String
@@ -54,6 +59,18 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  products Product[]
+}
+
+model City {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  users        User[]
+  entepreneurs Entepreneur[]
 }
 
 model Donation {
@@ -71,7 +88,7 @@ model Donation {
 model Crowdfunding {
   id        String      @id @default(cuid())
   ownerId   String      @unique
-  owner     Entepreneur @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner     Entepreneur @relation(fields: [ownerId], references: [id])
   goal      Int
   earned    Int
   donations Donation[]
