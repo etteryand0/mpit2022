@@ -5,14 +5,16 @@ const Crowdfunding = gql`
     id: String!
     ownerId: String!
     owner: Entepreneur!
-    donators(
-      where: UserWhereInput
-      orderBy: UserOrderByWithRelationInput
-      cursor: UserWhereUniqueInput
+    goal: Int!
+    earned: Int!
+    donations(
+      where: DonationWhereInput
+      orderBy: DonationOrderByWithRelationInput
+      cursor: DonationWhereUniqueInput
       take: Int
       skip: Int
-      distinct: UserScalarFieldEnum
-    ): [User!]!
+      distinct: DonationScalarFieldEnum
+    ): [Donation!]!
     createdAt: DateTime!
     updatedAt: DateTime!
     _count: CrowdfundingCountOutputType!

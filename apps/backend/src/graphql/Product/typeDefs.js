@@ -14,9 +14,18 @@ const Product = gql`
       distinct: UserScalarFieldEnum
     ): [User!]!
     title: String!
+    category(
+      where: CategoryWhereInput
+      orderBy: CategoryOrderByWithRelationInput
+      cursor: CategoryWhereUniqueInput
+      take: Int
+      skip: Int
+      distinct: CategoryScalarFieldEnum
+    ): [Category!]!
     description: String!
     composition: String!
     image: String!
+    price: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
     _count: ProductCountOutputType!

@@ -1,4 +1,7 @@
 const { Crowdfunding } = require('./Crowdfunding/typeDefs')
+const { Donation } = require('./Donation/typeDefs')
+const { City } = require('./City/typeDefs')
+const { Category } = require('./Category/typeDefs')
 const { Product } = require('./Product/typeDefs')
 const { Entepreneur } = require('./Entepreneur/typeDefs')
 const { User } = require('./User/typeDefs')
@@ -10,6 +13,9 @@ const typeDefs = mergeTypeDefs([
   User,
   Entepreneur,
   Product,
+  Category,
+  City,
+  Donation,
   Crowdfunding,
 ])
 

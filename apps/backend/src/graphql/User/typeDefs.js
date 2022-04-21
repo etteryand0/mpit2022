@@ -16,15 +16,17 @@ const User = gql`
       skip: Int
       distinct: ProductScalarFieldEnum
     ): [Product!]!
-    donatedFundings(
-      where: CrowdfundingWhereInput
-      orderBy: CrowdfundingOrderByWithRelationInput
-      cursor: CrowdfundingWhereUniqueInput
+    donations(
+      where: DonationWhereInput
+      orderBy: DonationOrderByWithRelationInput
+      cursor: DonationWhereUniqueInput
       take: Int
       skip: Int
-      distinct: CrowdfundingScalarFieldEnum
-    ): [Crowdfunding!]!
+      distinct: DonationScalarFieldEnum
+    ): [Donation!]!
     createdAt: DateTime!
+    city: City!
+    cityId: String!
     _count: UserCountOutputType!
   }
 

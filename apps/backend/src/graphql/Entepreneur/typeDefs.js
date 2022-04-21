@@ -18,6 +18,8 @@ const Entepreneur = gql`
     ): [Product!]!
     crowdfunding: Crowdfunding
     createdAt: DateTime!
+    city: City!
+    cityId: String!
     _count: EntepreneurCountOutputType!
   }
 
