@@ -1,0 +1,50 @@
+const { createWriteStream, unlink } = require("fs")
+const shortId = require("shortid")
+const path = require('path')
+const { ASSETS_PATH } = require('../../main')
+
+/**
+ * Stores a GraphQL file upload in the filesystem.
+ * @param {Promise<object>} upload GraphQL file upload.
+ * @returns {Promise<string>} Resolves the stored file name.
+ */
+async function storeUpload(upload) {
+  const { createReadStream, filename, mimetype, encoding } = await upload;
+  const stream = createReadStream();
+  const storedFileName = `${shortId.generate()}-${filename}`;
+  console.log(ASSETS_PATH)
+  const storedFileUrl = path.join(ASSETS_PATH, storedFileName);
+
+  // Store the file in the filesystem.
+  await new Promise((resolve, reject) => {
+    // Create a stream to which the upload will be written.
+    const writeStream = createWriteStream(storedFileUrl);
+
+    // When the upload is fully written, resolve the promise.
+    writeStream.on("finish", resolve);
+
+    // If there's an error writing the file, remove the partially written file
+    // and reject the promise.
+    writeStream.on("error", (error) => {
+      unlink(storedFileUrl, () => {
+        reject(error);
+      });
+    });
+
+    // In Node.js <= v13, errors are not automatically propagated between piped
+    // streams. If there is an error receiving the upload, destroy the write
+    // stream with the corresponding error.
+    stream.on("error", (error) => writeStream.destroy(error));
+
+    // Pipe the upload into the write stream.
+    stream.pipe(writeStream);
+  });
+
+  return {
+    filename: storedFileName,
+    mimetype,
+    encoding,
+  };
+}
+
+module.exports = storeUpload

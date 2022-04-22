@@ -9,10 +9,16 @@
   },
   "private": true,
   "dependencies": {
+    "@graphql-tools/schema": "^8.3.10",
+    "apollo-server-core": "^3.6.7",
+    "apollo-server-express": "^3.6.7",
+    "fs": "^0.0.1-security",
     "graphql-middleware": "^6.1.25",
     "graphql-upload": "^13.0.0",
+    "path": "^0.12.7",
     "react": "17.0.2",
     "react-native": "0.67.4",
+    "shortid": "^2.2.16",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -44,7 +50,6 @@
     "@types/react-native": "0.67.3",
     "@typescript-eslint/eslint-plugin": "~5.18.0",
     "@typescript-eslint/parser": "~5.18.0",
-    "apollo-server": "^2.24.0",
     "babel-jest": "27.2.3",
     "bcryptjs": "^2.4.3",
     "detox": "19.5.7",

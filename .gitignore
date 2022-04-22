@@ -93,4 +93,6 @@ buck-out/
 
 apps/agronet-e2e/artifacts
 apps/backend/data 
+apps/backend/static/*
+!.gitkeep
 # apps/backend/prisma/migrations

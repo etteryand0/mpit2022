@@ -1,15 +1,25 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT_EXPRESS || 8001;
+const httpServer = require('http').createServer(app)
+
+const {
+  graphqlUploadExpress,
+} = require('graphql-upload');
 
 app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log('Express server is running at port ' + PORT)
-});
+app.use(graphqlUploadExpress())
 
-const { ApolloServer, makeExecutableSchema } = require('apollo-server');
+const ASSETS_PATH = require('path').join(__dirname, 'assets')
+
+module.exports = {
+  ASSETS_PATH
+}
+
+const { ApolloServer } = require('apollo-server-express');
+const { makeExecutableSchema } = require("@graphql-tools/schema")
+const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const { applyMiddleware } = require('graphql-middleware')
 
 const { PrismaClient } = require('@prisma/client');
@@ -33,6 +43,7 @@ const schemaWithMiddleware = applyMiddleware(schema, ...middlewares)
 
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   context: async ({ req }) => {
     const authorization = req.headers;
 
@@ -56,6 +67,11 @@ const server = new ApolloServer({
   }
 });
 
-server.listen().then(({ url }) => {
-  console.log(`Server up & running at ${url}`)
-})
+const startServer = async (server) => {
+  await server.start()
+  server.applyMiddleware({ app, path: '/' })
+  await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+}
+
+startServer(server)
