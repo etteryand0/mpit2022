@@ -18,6 +18,7 @@ const client = createClient({
 
 const screenOptions: NativeStackNavigationOptions = {
   header: Header,
+  animation: "simple_push"
 }
 
 const App = () => {
