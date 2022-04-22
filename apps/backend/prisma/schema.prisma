@@ -1,0 +1,98 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum RoleEnum {
+  User
+  Admin
+}
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+
+  name      String
+  surname   String
+  role      RoleEnum   @default(User)
+  purchases Product[]
+  donations Donation[]
+
+  createdAt DateTime @default(now())
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    String
+}
+
+model Entepreneur {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+
+  name         String
+  bio          String
+  avatar       String
+  products     Product[]
+  crowdfunding Crowdfunding?
+
+  createdAt DateTime @default(now())
+  city      City     @relation(fields: [cityId], references: [id])
+  cityId    String
+}
+
+model Product {
+  id         String      @id @default(cuid())
+  owner_id   String
+  owner      Entepreneur @relation(fields: [owner_id], references: [id])
+  purchasers User[]
+
+  title       String
+  category    Category[]
+  description String
+  composition String
+  image       String
+  price       Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  products Product[]
+}
+
+model City {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  users        User[]
+  entepreneurs Entepreneur[]
+}
+
+model Donation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  amount    Int
+
+  donor   User   @relation(fields: [donorId], references: [id])
+  donorId String
+
+  crowdfunding   Crowdfunding @relation(fields: [crowdfundingId], references: [id])
+  crowdfundingId String
+}
+
+model Crowdfunding {
+  id        String      @id @default(cuid())
+  ownerId   String      @unique
+  owner     Entepreneur @relation(fields: [ownerId], references: [id])
+  goal      Int
+  earned    Int         @default(0)
+  donations Donation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
