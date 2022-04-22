@@ -9,7 +9,6 @@
     "react-native": "*",
     "react-native-config": "*",
     "react-native-svg": "*",
-    "@react-native-async-storage/async-storage": "*",
     "@react-navigation/native-stack": "*",
     "@react-navigation/native": "*",
     "react-native-safe-area-context": "*",
