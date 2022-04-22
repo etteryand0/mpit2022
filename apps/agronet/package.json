@@ -12,6 +12,8 @@
     "@react-navigation/native-stack": "*",
     "@react-navigation/native": "*",
     "react-native-safe-area-context": "*",
-    "react-native-screens": "*"
+    "react-native-screens": "*",
+    "urql": "*",
+    "graphql": "*"
   }
 }

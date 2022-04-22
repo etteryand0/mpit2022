@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useState, useEffect } from "react"
+import React from "react"
 import {
   View,
   Text,
@@ -18,7 +18,7 @@ export type ProductCardProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, "Catalog", undefined>,
 }
 
-const widthCard = (Dimensions.get("screen").width - 60 - 10)/ 2
+export const widthCard = (Dimensions.get("screen").width - 60 - 10)/ 2
 
 const ProductCard = ({ title, description, image, id, navigation }: ProductCardProps) => {
   return (
@@ -26,7 +26,7 @@ const ProductCard = ({ title, description, image, id, navigation }: ProductCardP
       <View style={styles.imageContainer}>
         <Image 
           style={styles.image}
-          source={{ uri: `http://134.0.115.120/static/${image}`}} />
+          source={{ uri: `http://sergin.space/static/${image}`}} />
       </View>
       <View>
         <Text numberOfLines={2} style={styles.title}>{title}</Text>
@@ -48,13 +48,16 @@ const styles = StyleSheet.create({
     width: widthCard,
   },
   imageContainer: {
-    height: 100,
+    height: 120,
     width: "100%",
     backgroundColor: "#a4a4a4",
     borderRadius: 15,
+    overflow: "hidden",
   },
   image: {
-    resizeMode: "contain",
+    resizeMode: "cover",
+    width: widthCard - 26,
+    height: 120,
   },
   title: {
     fontWeight: "600",
