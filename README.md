@@ -8,6 +8,12 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Smart, Fast and Extensible Build System**
 
+## Usage
+У вас дложен быть установлен Nodejs 16 и выше, также убедитесь, что Android development environment установлен
+1. Установка npm пакетов
+2. Билд приложения: `npx nx build-android agronet`
+3. Билд бэекенда: `npx nx build backend`
+
 ## Adding capabilities to your workspace
 
 Nx supports many plugins which add capabilities for developing different types of applications and different tools.
