@@ -19,8 +19,41 @@ const Catalog = ({ navigation }: ScreenProps<"Catalog">) => {
   const [category, setCategory] = useState<null | "products" | "materials">(null)
   const [result, reexecuteSearch] = useQuery({
     query: findManyProduct,
-    variables: { search }
+    variables: category
+      ? {
+        where: {
+          AND: [
+            {
+              OR: [
+                { title: { contains: search } },
+                { description: { contains: search } },
+              ]
+            },
+            {
+              category: {
+                every: {
+                  id: {
+                    equals: category === "products" ? foodCategoryId : materialsCategoryId
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+      : {
+        where: {
+          OR: [
+            { title: { contains: search } },
+            { description: { contains: search } },
+          ]
+        }
+      }
   })
+
+  useEffect(() => {
+    reexecuteSearch()
+  }, [category])
 
   return (
     <View style={styles.container}>
@@ -43,20 +76,14 @@ const Catalog = ({ navigation }: ScreenProps<"Catalog">) => {
       {result.error ? <Text>Ошибка сервера</Text> : null}
       {result.fetching ? <ActivityIndicator size='small' /> : null}
       <FlatList
+        scrollEnabled
         data={result.data?.findManyProduct}
         renderItem={({ item, index }) => {
-          if (category === null)
-            return <ProductCard {...item} navigation={navigation} />
-
-          const mustId = category === "products" ? foodCategoryId : materialsCategoryId
-          if (mustId === item.category[0].id)
-            return <ProductCard {...item} navigation={navigation} />
-
-          return null
+          return <ProductCard {...item} navigation={navigation} />
         }}
         numColumns={2}
         keyExtractor={(item, index) => `${index}-${item.id}`}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
+        columnWrapperStyle={{ justifyContent: "space-between", marginBottom: 20 }}
       />
     </View>
   )

@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
     height: 30,
     position: 'absolute',
     minWidth: (Dimensions.get('screen').width - 60) * 0.13,
+    maxWidth: Dimensions.get('screen').width - 60,
     borderRadius: 100,
   },
   footer: {
